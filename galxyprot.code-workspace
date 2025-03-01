@@ -1,0 +1,13 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "../Port"
+		}
+	],
+	"settings": {
+		"liveServer.settings.multiRootWorkspaceName": "galxyprot"
+	}
+}

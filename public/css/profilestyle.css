@@ -1,0 +1,185 @@
+/* Import Google Font */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+/* Global Styles */
+html, body {
+    background: #111;
+    color: #f4f4f4;
+    font-family: "Helvetica Neue", sans-serif !important;
+    font-size: calc(100vw / 192);
+    line-height: 1.6 !important;
+    letter-spacing: 0.02rem;
+    min-height: 100vh; /* Ensures full viewport height */
+    height: auto; /* Allow body to expand */
+    scroll-behavior: smooth;
+    text-rendering: optimizeLegibility;
+    font-feature-settings: "palt";
+    -webkit-text-size-adjust: 100%;
+    overflow-x: hidden; /* Prevent horizontal scroll */
+    overflow-y: auto !important;
+
+}
+main {
+    padding-top: 10rem; /* Adjust based on header height */
+    padding-bottom: 10rem; /* Adjust based on footer height */
+}
+
+
+/* Reset Margins and Padding */
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+a {
+    color: inherit;
+    text-decoration: inherit;
+}
+
+
+  /* Header Styles */
+header {
+    width: 100vw;
+    padding: 8rem;
+    position: fixed;
+    z-index: 999;
+    font-size: 1.4rem;
+}
+
+header .h_inner {
+    display: flex;
+    justify-content: space-between;
+}
+
+header .logo img {
+    width: 2.4rem;
+    height: auto;
+}
+
+
+.sub_en {
+    font-family: 'MonthGlade' !important;
+}
+
+.f_gray {
+    color: #717171;
+}
+
+.wrapper_inner {
+    width: 143.2rem;
+    margin: 0 auto;
+}
+/* Footer Styles */
+footer {
+    min-width: 100%;
+    position: fixed;
+    padding: 0 8rem;
+    bottom: 8rem;
+    z-index: 999;
+    font-size: 1.4rem;
+}
+
+.f_inner {
+    display: flex;
+    justify-content: space-between;
+}
+/* Profile and  ChoiSection */
+.profile_link {
+    position: relative;
+    z-index: 999;
+}
+/* Galaxy Section */
+#galaxy {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%; /* Ensure it fills the entire section */
+    z-index: -1; /* Keep it behind the text */
+}
+
+/* WebGL Canvas Styling */
+canvas.webgl {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: -1; /* Push it to the back */
+}
+
+.webgl {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: -1; /* 👈 This pushes WebGL behind everything */
+    pointer-events: none; /* Prevents accidental clicks on canvas */
+}
+.webgl { opacity: 1 !important; }
+.webgl { display: block !important; }
+
+/* Ensure Content Stays on Top */
+#content {
+    position: relative;
+    z-index: 1; /* Content stays above the canvas */
+}
+.profile_headline {
+    min-width: 100%;
+    min-height: calc(var(--vh, 1vh) * 100);
+    padding-top: 14rem;
+    padding-bottom: 16rem;
+    text-align: center;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+    position: relative;
+    z-index: 1; /* Keeps headlines above the galaxy */
+}
+.about-overlay {
+    transition: right 1s ease-out;
+}
+.section {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    z-index: 2;
+}
+#about-me .about-content h1 {
+    font-family: 'Merriweather', sans-serif; /* Change to your preferred font */
+    font-size: 3rem;
+    font-weight: 600; /* Adjust weight if needed */
+}
+#about-me .about-content p {
+    font-family: 'Merriweather', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 400;
+}
+#contact .contact-content h1 {
+    font-family: 'Poppins', sans-serif;
+    font-size: 3rem;
+    font-weight: 600;
+}
+
+#contact .contact-content p {
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 400;
+}
+
+#aboutMeCanvas {
+    position: absolute;
+    top: 100%;
+    left: 100%;
+    width: 1000px;
+    height: 1000px;
+    transform: translate(-50%, -50%);
+    z-index: 1;
+    pointer-events: none;
+}
+
+
