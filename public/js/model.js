@@ -1,11 +1,11 @@
 import * as THREE from 'three';
-import { gsap } from 'gsap';
+import { gsap } from 'gsap'; // Make sure gsap is installed
 
 // Canvas and Scene Setup
-const canvas = document.querySelector('canvas.webgl-secondary');
+const canvas = document.querySelector('canvas.webgl');
 const scene = new THREE.Scene();
 
-// Galaxy Parameters
+// Parameters for the galaxy
 const parameters = {
     count: 400000,
     size: 0.005,
@@ -18,179 +18,144 @@ const parameters = {
     outsideColor: '#1b3984'
 };
 
-// Generate Galaxy
-let galaxyGeometry = new THREE.BufferGeometry();
-const positions = new Float32Array(parameters.count * 3);
-const colors = new Float32Array(parameters.count * 3);
-const insideColor = new THREE.Color(parameters.insideColor);
-const outsideColor = new THREE.Color(parameters.outsideColor);
+let geometry = null;
+let material = null;
+let points = null;
 
-for (let i = 0; i < parameters.count; i++) {
-    const i3 = i * 3;
-    const radius = Math.sqrt(Math.random()) * parameters.radius;
-    const branchAngle = (i % parameters.branches) / parameters.branches * Math.PI * 2;
-    const spinAngle = radius * parameters.spin * 0.5;
-    const randomX = Math.pow(Math.random(), parameters.randomnessPower) * (Math.random() < 0.5 ? 1 : -1) * parameters.randomness * radius;
-    const randomY = Math.pow(Math.random(), parameters.randomnessPower) * (Math.random() < 0.5 ? 1 : -1) * parameters.randomness * radius;
-    const randomZ = Math.pow(Math.random(), parameters.randomnessPower) * (Math.random() < 0.5 ? 1 : -1) * parameters.randomness * radius;
-    positions[i3] = Math.cos(branchAngle + spinAngle) * radius + randomX;
-    positions[i3 + 1] = randomY;
-    positions[i3 + 2] = Math.sin(branchAngle + spinAngle) * radius + randomZ;
-    const mixedColor = insideColor.clone();
-    mixedColor.lerp(outsideColor, radius / parameters.radius);
-    colors[i3] = mixedColor.r;
-    colors[i3 + 1] = mixedColor.g;
-    colors[i3 + 2] = mixedColor.b;
-}
+const generateGalaxy = () => {
+    if (points !== null) {
+        geometry.dispose();
+        material.dispose();
+        scene.remove(points);
+    }
 
-galaxyGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-galaxyGeometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
-const galaxyMaterial = new THREE.PointsMaterial({
-    size: parameters.size,
-    sizeAttenuation: true,
-    depthWrite: false,
-    blending: THREE.AdditiveBlending,
-    vertexColors: true
-});
-const galaxy = new THREE.Points(galaxyGeometry, galaxyMaterial);
-scene.add(galaxy);
+    geometry = new THREE.BufferGeometry();
+    const positions = new Float32Array(parameters.count * 3);
+    const colors = new Float32Array(parameters.count * 3);
 
-// Sphere Object with Per-Vertex Colors
-// Sphere Object with Per-Vertex Colors
-const sphereGeometry = new THREE.SphereGeometry(1, 64, 18);
-const sphereColors = new Float32Array(sphereGeometry.attributes.position.count * 3); // Create color buffer
+    const insideColor = new THREE.Color(parameters.insideColor);
+    const outsideColor = new THREE.Color(parameters.outsideColor);
 
-// Assign random colors per vertex
-for (let i = 0; i < sphereGeometry.attributes.position.count; i++) {
-    const t = Math.random(); // Random blend factor between 0 (orange) and 1 (blue)
+    for (let i = 0; i < parameters.count; i++) {
+        const i3 = i * 3;
+        const radius = Math.random() * parameters.radius;
+        const branchAngle = (i % parameters.branches) / parameters.branches * Math.PI * 2;
+        const spinAngle = radius * parameters.spin;
 
-    // Blend between orange (ff6030) and blue (1b3984)
-    const orange = new THREE.Color(0xff6030);
-    const blue = new THREE.Color(0x1b3984);
-    const mixedColor = orange.clone().lerp(blue, t); // Smooth transition between the two
+        const randomX = Math.pow(Math.random(), parameters.randomnessPower) * (Math.random() < 0.5 ? 1 : -1) * parameters.randomness * radius;
+        const randomY = Math.pow(Math.random(), parameters.randomnessPower) * (Math.random() < 0.5 ? 1 : -1) * parameters.randomness * radius;
+        const randomZ = Math.pow(Math.random(), parameters.randomnessPower) * (Math.random() < 0.5 ? 1 : -1) * parameters.randomness * radius;
 
-    sphereColors[i * 3] = mixedColor.r;     // Red component
-    sphereColors[i * 3 + 1] = mixedColor.g; // Green component
-    sphereColors[i * 3 + 2] = mixedColor.b; // Blue component
-}
+        positions[i3] = Math.cos(branchAngle + spinAngle) * radius + randomX;
+        positions[i3 + 1] = randomY;
+        positions[i3 + 2] = Math.sin(branchAngle + spinAngle) * radius + randomZ;
 
-// Apply per-vertex colors
-sphereGeometry.setAttribute('color', new THREE.Float32BufferAttribute(sphereColors, 3));
+        const mixedColor = insideColor.clone();
+        mixedColor.lerp(outsideColor, radius / parameters.radius);
 
-// Change to `MeshBasicMaterial` instead of `PointsMaterial`
-const sphereMaterial = new THREE.MeshBasicMaterial({
-    vertexColors: true,  // Enable per-vertex coloring
-    wireframe: true      // Keep it looking like your current effect
-});
+        colors[i3] = mixedColor.r;
+        colors[i3 + 1] = mixedColor.g;
+        colors[i3 + 2] = mixedColor.b;
+    }
 
-const sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
-sphere.position.set(0, 1, 0);
-scene.add(sphere);
+    geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+    geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
 
+    material = new THREE.PointsMaterial({
+        size: parameters.size,
+        sizeAttenuation: true,
+        depthWrite: false,
+        blending: THREE.AdditiveBlending,
+        vertexColors: true
+    });
 
-// Light Setup
-const light = new THREE.PointLight('#ffffff', 1, 100);
-light.position.set(2, 3, 4);
-scene.add(light);
+    points = new THREE.Points(geometry, material);
+    scene.add(points);
+};
 
-// Camera Setup
+generateGalaxy();
+
+// Camera
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 100);
-camera.position.set(0, 3, 6);
-camera.lookAt(0, 1, 0);
+camera.position.set(8, 0, 0); // Initial position
+camera.lookAt(0, 0, 0); // Ensure the galaxy center is always in view
 scene.add(camera);
 
 // Renderer
-const renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true });
+const renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true });
 renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
-// Create Popup Container for Image and Text
-const popupContainer = document.createElement('div');
-popupContainer.style.position = 'fixed';
-popupContainer.style.top = '50%';
-popupContainer.style.left = '50%';
-popupContainer.style.transform = 'translate(-50%, -50%)';
-popupContainer.style.padding = '15px';
-popupContainer.style.backgroundColor = 'rgba(0, 0, 0, 0.9)'; // Dark background
-popupContainer.style.border = '2px solid white';
-popupContainer.style.borderRadius = '10px';
-popupContainer.style.boxShadow = '0 0 10px rgba(255, 255, 255, 0.5)';
-popupContainer.style.display = 'none'; // Hidden initially
-popupContainer.style.textAlign = 'center';
-popupContainer.style.zIndex = '9999';
-
-// Create Image Element
-const popupImage = document.createElement('img');
-popupImage.src = 'images/galaxy.png'; // Replace with your image path
-popupImage.style.width = '300px'; // Adjust size as needed
-popupImage.style.display = 'block'; 
-popupImage.style.marginBottom = '10px';
-popupImage.style.borderRadius = '5px';
-popupImage.style.cursor = 'pointer'; // Make it clear the image is clickable
-
-// Create Text Element
-const popupText = document.createElement('p');
-popupText.innerText = 'Click the image to visit the website!'; // Change this text as needed
-popupText.style.color = 'white';
-popupText.style.fontSize = '18px';
-popupText.style.fontFamily = 'Arial, sans-serif';
-popupText.style.margin = '0';
-
-// Append Image and Text to Container
-popupContainer.appendChild(popupImage);
-popupContainer.appendChild(popupText);
-document.body.appendChild(popupContainer);
-
-// Click Event to Show Popup and Hide Sphere
-const raycaster = new THREE.Raycaster();
-const mouse = new THREE.Vector2();
-
-canvas.addEventListener('click', (event) => {
-    mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-    mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
-    raycaster.setFromCamera(mouse, camera);
-    const intersects = raycaster.intersectObject(sphere);
-
-    if (intersects.length > 0) {
-        gsap.to(sphere.scale, { x: 2, y: 2, z: 2, duration: 0.5, onComplete: () => {
-            sphere.visible = false; // Hide sphere when popup appears
-            popupContainer.style.display = 'block'; // Show popup
-        }});
-    }
-});
-
-// Redirect to website when clicking image
-popupImage.addEventListener('click', () => {
-    window.open('https://solarsystem-jw5cfcps4-javvvvvvvvvvvva.vercel.app/?fbclid=PAZXh0bgNhZW0CMTEAAaZNBPuqiEUjUQ3C_adnkUT6ZQtm0Iz7NagviLiaAYGeFiMb7oYTab2jx2I_aem_tG9dIarT3Zg_jNA58265oA', '_blank');
-});
-
-
-// Global Click Event to Detect Clicks Outside the Image
-document.addEventListener('click', (event) => {
-    // If popup is visible and the click is not on the image, close the popup
-    if (popupContainer.style.display === 'block' && event.target !== popupImage) {
-        popupContainer.style.display = 'none';
-
-        // Reset sphere scale before making it visible again
-        sphere.scale.set(1, 1, 1);
-        sphere.visible = true;
-    }
-});
- 
-// Animation Loop
-const clock = new THREE.Clock();
-const animate = () => {
-    requestAnimationFrame(animate);
-    galaxy.rotation.y += 0.001;
-    sphere.rotation.y += 0.01;
-    renderer.render(scene, camera);
-};
-animate();
-
-// Resize Handling
+// Handle window resizing properly
 window.addEventListener('resize', () => {
+    renderer.setSize(window.innerWidth, window.innerHeight);
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
-    renderer.setSize(window.innerWidth, window.innerHeight);
+});
+
+// Smoothly update camera settings
+
+const updateCamera = (settings) => {
+    gsap.to(camera.position, {
+        x: settings.position.x,
+        y: settings.position.y,
+        z: settings.position.z,
+        duration: 1
+        
+    });
+    gsap.to(camera, {
+        fov: settings.fov,
+        duration: 1,
+        onUpdate: () => camera.updateProjectionMatrix()
+    });
+};
+
+// Scroll Event Listener
+window.addEventListener('scroll', () => {
+    const scrollY = window.scrollY;
+    const maxScroll = document.body.scrollHeight - window.innerHeight;
+
+    // Calculate the current section based on scroll position
+    const sectionIndex = Math.min(
+        Math.floor((scrollY / maxScroll) * sectionCameraSettings.length),
+        sectionCameraSettings.length - 1
+    );
+
+    // Update camera smoothly
+    updateCamera(sectionCameraSettings[sectionIndex]);
+});
+
+const clock = new THREE.Clock();
+let baseRotationSpeed = 0.001; // Default rotation speed
+let rotationSpeed = baseRotationSpeed; // Current rotation speed
+let lastScrollY = window.scrollY; // Track last scroll position
+
+const animate = () => {
+    const elapsedTime = clock.getElapsedTime();
+
+    // Apply dynamic rotation speed
+    points.rotation.y += rotationSpeed;
+
+    renderer.render(scene, camera);
+    requestAnimationFrame(animate);
+};
+
+animate();
+
+// Adjust rotation speed based on scroll
+window.addEventListener('scroll', () => {
+    const currentScrollY = window.scrollY;
+    
+    // Calculate scroll difference (speed)
+    let scrollDelta = currentScrollY - lastScrollY;
+
+    // If scrolling down, slow down rotation; if scrolling up, speed up
+    if (scrollDelta > 0) {
+        rotationSpeed = Math.max(baseRotationSpeed * 0.1, rotationSpeed * 0.9); // Slow down
+    } else if (scrollDelta < 0) {
+        rotationSpeed = Math.min(baseRotationSpeed * 2, rotationSpeed * 1.1); // Speed up
+    }
+
+    lastScrollY = currentScrollY; // Update last scroll position
 });
 
