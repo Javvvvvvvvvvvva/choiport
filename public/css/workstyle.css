@@ -17,7 +17,7 @@ html, body {
     overflow-y: scroll;  /* Allows scrolling */
     scrollbar-width: none;  /* Firefox */
     -ms-overflow-style: none;  /* Internet Explorer/Edge */
-
+    scroll-behavior: smooth;
 }
 
 
@@ -222,4 +222,36 @@ canvas.webgl {
     align-items: center;
     justify-content: center;
     text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.8);
+}
+.section {
+    min-height: 100vh;
+    padding: 18rem 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    z-index: 2;
+}
+#works-2 {
+    margin-top: 90rem; /* Pushes this section down */
+    min-height: 100vh; /* Ensures it's fully below the intro */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.8);
+}
+.works-container img:hover {
+    transform: scale(1.03);
+    box-shadow: 0 10px 20px rgba(11, 63, 221, 0.3);
+    transition: all 0.3s ease-in-out;
+}
+.fade-in {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: all 0.8s ease-out;
+}
+
+.fade-in.visible {
+    opacity: 1;
+    transform: translateY(0);
 }
