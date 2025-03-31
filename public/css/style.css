@@ -6,13 +6,13 @@ html, body {
     font-size: calc(100vw / 192);
     line-height: 1.6 !important;
     letter-spacing: 0.02rem;
-    min-height: 100vh; /* Ensures full viewport height */
-    height: auto; /* Allow body to expand */
+    min-height: 100vh;
+    height: auto; 
     scroll-behavior: smooth;
     text-rendering: optimizeLegibility;
     font-feature-settings: "palt";
     -webkit-text-size-adjust: 100%;
-    overflow-x: hidden; /* Prevent horizontal scroll */
+    overflow-x: hidden; 
     background-color: black;
 }
 
@@ -128,7 +128,7 @@ footer {
     justify-content: space-between;
     flex-direction: column;
     position: relative;
-    z-index: 1; /* Keeps headlines above the galaxy */
+    z-index: 1; 
 }
 
 .choi_headline .top_headline span {
@@ -148,8 +148,8 @@ footer {
     top: 0;
     left: 0;
     width: 100%;
-    height: 100%; /* Ensure it fills the entire section */
-    z-index: -1; /* Keep it behind the text */
+    height: 100%; 
+    z-index: -1;
 }
 
 /* WebGL Canvas Styling */
@@ -159,7 +159,7 @@ canvas.webgl {
     left: 0;
     width: 100vw;
     height: 100vh;
-    z-index: -1; /* Push it to the back */
+    z-index: -1; 
 }
 
 .webgl {
@@ -168,11 +168,10 @@ canvas.webgl {
     left: 0;
     width: 100vw;
     height: 100vh;
-    z-index: -1; /* 👈 This pushes WebGL behind everything */
-    pointer-events: none; /* Prevents accidental clicks on canvas */
-
-        transform: rotate(-20deg); /* Adjust this value to tilt more/less */
-        transform-origin: center;
+    z-index: -1; 
+    pointer-events: none; 
+    transform: rotate(-20deg); 
+    transform-origin: center;
     
     
 }
@@ -182,7 +181,7 @@ canvas.webgl {
 /* Ensure Content Stays on Top */
 #content {
     position: relative;
-    z-index: 1; /* Content stays above the canvas */
+    z-index: 1; 
 }
 .profile_headline {
     min-width: 100%;
@@ -194,7 +193,7 @@ canvas.webgl {
     justify-content: space-between;
     flex-direction: column;
     position: relative;
-    z-index: 1; /* Keeps headlines above the galaxy */
+    z-index: 1; 
 }
 @keyframes glowFlicker {
     0% { text-shadow: 0px 0px 10px rgba(255, 255, 255, 0.7), 0px 0px 20px rgba(255, 140, 66, 0.5); }
