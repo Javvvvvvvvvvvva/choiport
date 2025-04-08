@@ -1,6 +1,8 @@
 import * as THREE from 'https://unpkg.com/three/build/three.module.js';
+import { gsap } from "https://cdn.skypack.dev/gsap";
+import { ScrollTrigger } from "https://cdn.skypack.dev/gsap/ScrollTrigger";
 
-import { gsap } from 'gsap'; // Ensure gsap is installed
+gsap.registerPlugin(ScrollTrigger);
 
 // Canvas and Scene Setup
 const canvas = document.querySelector('canvas.webgl');
