@@ -1,4 +1,5 @@
-import * as THREE from 'three';
+import * as THREE from 'https://unpkg.com/three/build/three.module.js';
+
 import { gsap } from 'gsap'; // Make sure gsap is installed
 
 // Canvas and Scene Setup
